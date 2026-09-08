@@ -12,3 +12,10 @@ chromadb>=0.5
 
 # Data
 pandas>=2.0
+
+# Model
+langchain-ollama
+langchain-chroma
+
+# Output validation 
+pydantic
