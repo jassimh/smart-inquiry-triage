@@ -1,0 +1,23 @@
+﻿# Local Python environment
+.venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Generated vector index and temporary files
+.chroma/
+chroma_db/
+tmp/
+*.log
+
+# preparation notes
+docs/LEARNING_PLAN.md
