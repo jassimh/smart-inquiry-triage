@@ -1,3 +1,6 @@
+"""Compose classification, retrieval, decisions, and resolution into a single workflow."""
+
+
 from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -5,6 +8,7 @@ from langgraph.graph import END, START, StateGraph
 from src.classify import classify_inquiry
 from src.decisions import assess_evidence, route_category
 from src.knowledge_base import retrieve_cases
+from src.resolution import draft_resolution
 
 
 class TriageState(TypedDict, total=False):
@@ -20,6 +24,7 @@ class TriageState(TypedDict, total=False):
     decision: dict
     routed_queue: str
     review_status: str
+    resolution_notes: str
 
 
 def classify_node(state: TriageState) -> dict:
@@ -67,6 +72,18 @@ def human_review_node(state: TriageState) -> dict:
     return {"review_status": "human_review_required"}
 
 
+def resolution_node(state: TriageState) -> dict:
+    notes = draft_resolution(
+        query=state["query"],
+        category=state["category"],
+        decision=state["decision"],
+        routed_queue=state["routed_queue"],
+        retrieved_cases=state["retrieved_past_cases"],
+    )
+
+    return {"resolution_notes": notes}
+
+
 def finish_node(state: TriageState) -> dict:
     return {"review_status": "not_flagged"}
 
@@ -79,21 +96,25 @@ def build_graph():
     builder.add_node("assess", assess_node)
     builder.add_node("route", route_node)
     builder.add_node("human_review", human_review_node)
+    builder.add_node("resolution", resolution_node)
     builder.add_node("finish", finish_node)
 
     builder.add_edge(START, "classify")
     builder.add_edge("classify", "retrieve")
     builder.add_edge("retrieve", "assess")
     builder.add_edge("assess", "route")
+    builder.add_edge("route", "resolution")
 
+    # Draft notes before selecting the final review status.
     builder.add_conditional_edges(
-        "route",
+        "resolution",
         choose_review_path,
         {
             "review": "human_review",
             "finish": "finish",
         },
     )
+
 
     builder.add_edge("human_review", END)
     builder.add_edge("finish", END)

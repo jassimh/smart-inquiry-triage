@@ -1,12 +1,21 @@
 """
 Smart Inquiry Triage Assistant — Streamlit chat interface.
 
-This is the FRONTEND only. The actual triage logic (LLM, embeddings,
-vector store, LangGraph workflow) is left for you (the candidate) to
-implement in `triage_inquiry` below / in `src/main.py`.
+Collects inquiries and settings, displays results, and preserves session history.
 """
 
+import sys
+from pathlib import Path
+
 import streamlit as st
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
+from src.main import triage_inquiry as run_triage
 
 # --- Configuration (sidebar controls) ------------------------------------
 
@@ -21,64 +30,52 @@ with st.sidebar:
     )
 
 
-# --- Backend hook (IMPLEMENT ME) -----------------------------------------
+# --- Backend-----------------------------------------
 
 def triage_inquiry(query: str, top_k: int, confidence_threshold: float) -> dict:
-    """
-    TODO (candidate): implement the triage pipeline.
-
-    Run the classify -> retrieve Top-K -> determine priority -> route ->
-    resolution notes workflow (LangGraph) and return a dict shaped like:
-
-        {
-            "query": query,
-            "category": "<predicted category>",
-            "priority": "<low | medium | high>",
-            "routed_queue": "<target queue/team>",
-            "confidence": 0.0,                      # 0.0 - 1.0
-            "resolution_notes": "<1-2 line note>",
-            "retrieved_past_cases": ["<case 1>", "<case 2>", ...],
-            "escalated": False,                     # confidence < threshold
-        }
-
-    You can import and call your real implementation from `src/main.py`.
-    """
-    raise NotImplementedError("Implement the triage pipeline here.")
-
-    # Example placeholder shape (remove once implemented):
-    # return {
-    #     "query": query,
-    #     "category": "unknown",
-    #     "priority": "low",
-    #     "routed_queue": "general",
-    #     "confidence": 0.0,
-    #     "resolution_notes": "",
-    #     "retrieved_past_cases": [],
-    #     "escalated": True,
-    # }
+   
+    return run_triage(
+        query=query,
+        top_k=top_k,
+        confidence_threshold=confidence_threshold,
+    )
 
 
 # --- Result rendering -----------------------------------------------------
 
 def render_result(result: dict) -> None:
-    """Render a triage result in the fixed output format."""
-    st.markdown(f"**query:** {result.get('query', '')}")
-    st.markdown(f"**category:** {result.get('category', '')}")
-    st.markdown(f"**priority:** {result.get('priority', '')}")
-    st.markdown(f"**routed queue:** {result.get('routed_queue', '')}")
-    st.markdown(f"**confidence:** {result.get('confidence', '')}")
-    st.markdown(f"**resolution notes:** {result.get('resolution_notes', '')}")
+    st.write("**Query:**", result["query"])
+    st.write("**Category:**", result["category"])
+    st.write("**Priority:**", result["priority"])
+    st.write("**Routed queue:**", result["routed_queue"])
+    st.write("**Confidence score:**", round(result["confidence"], 3))
+    st.caption("Experimental evidence score; not a probability of correctness.")
 
-    past_cases = result.get("retrieved_past_cases", [])
-    st.markdown("**retrieved past cases:**")
-    if past_cases:
-        for case in past_cases:
-            st.markdown(f"- {case}")
-    else:
-        st.markdown("- _none_")
+    st.markdown("**Suggested resolution notes:**")
+    st.text(result["resolution_notes"])
 
-    if result.get("escalated"):
-        st.warning("⚠️ Escalated to human review (confidence below threshold).")
+    if result["escalated"]:
+        st.warning("Human review required. Suggested actions need verification.")
+        for reason in result["review_reasons"]:
+            st.write(reason)
+
+    with st.expander("Retrieved historical cases"):
+        for case in result["retrieved_past_cases"]:
+            st.write(
+                f"{case['case_id']} | "
+                f"{case['category']} | "
+                f"{case['priority']} | "
+                f"similarity {case['cosine_similarity']:.3f}"
+            )
+            st.text(case["inquiry_text"])
+
+    with st.expander("Decision details"):
+        st.json({
+            "classification_reason": result["classification_reason"],
+            "priority_votes": result["priority_votes"],
+            "confidence_components": result["confidence_components"],
+            "review_status": result["review_status"],
+        })
 
 
 # --- Chat / session view --------------------------------------------------
@@ -108,8 +105,8 @@ if query:
                 result = triage_inquiry(query, top_k, confidence_threshold)
             render_result(result)
             st.session_state.history.append({"query": query, "result": result})
-        except NotImplementedError:
-            msg = "Backend not implemented yet — implement `triage_inquiry`."
+        except Exception as error:
+            msg = f"Triage could not complete: {error}"
             st.error(msg)
             st.session_state.history.append(
                 {"query": query, "result": None, "error": msg}
