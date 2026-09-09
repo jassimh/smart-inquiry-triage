@@ -28,6 +28,7 @@ class TriageState(TypedDict, total=False):
 
 
 def classify_node(state: TriageState) -> dict:
+    """Return the model's category and explanation as updates to shared state."""
     classification = classify_inquiry(state["query"])
 
     return {
@@ -37,6 +38,7 @@ def classify_node(state: TriageState) -> dict:
 
 
 def retrieve_node(state: TriageState) -> dict:
+    """Return historical matches using the inquiry and requested Top-K."""
     cases = retrieve_cases(
         state["query"],
         top_k=state["top_k"],
@@ -46,6 +48,7 @@ def retrieve_node(state: TriageState) -> dict:
 
 
 def assess_node(state: TriageState) -> dict:
+    """Return priority, confidence, and review reasons from retrieved evidence."""
     decision = assess_evidence(
         category=state["category"],
         retrieved_cases=state["retrieved_past_cases"],
@@ -56,11 +59,13 @@ def assess_node(state: TriageState) -> dict:
 
 
 def route_node(state: TriageState) -> dict:
+    """Return the queue configured for the predicted category."""
     queue = route_category(state["category"])
     return {"routed_queue": queue}
 
 
 def choose_review_path(state: TriageState) -> str:
+    """Choose the final branch from the decision's existing escalation flag."""
     if state["decision"]["escalated"]:
         return "review"
 
@@ -68,11 +73,13 @@ def choose_review_path(state: TriageState) -> str:
 
 
 def human_review_node(state: TriageState) -> dict:
+    """Mark the result for review without notifying or waiting for a person."""
     # This flags the result; it does not contact a person.
     return {"review_status": "human_review_required"}
 
 
 def resolution_node(state: TriageState) -> dict:
+    """Add suggested notes using the inquiry, decisions, and historical context."""
     notes = draft_resolution(
         query=state["query"],
         category=state["category"],
@@ -85,10 +92,12 @@ def resolution_node(state: TriageState) -> dict:
 
 
 def finish_node(state: TriageState) -> dict:
+    """Mark the result as not flagged; this does not certify answer correctness."""
     return {"review_status": "not_flagged"}
 
 
 def build_graph():
+    """Compile the ordered triage nodes and final review branch without running them."""
     builder = StateGraph(TriageState)
 
     builder.add_node("classify", classify_node)
@@ -127,6 +136,12 @@ def make_initial_state(
     top_k: int = 3,
     confidence_threshold: float = 0.5,
 ) -> TriageState:
+    """Validate workflow inputs and return a fresh state containing only inputs.
+
+    Requires a nonblank string, integer Top-K from 1 to 10, and a threshold
+    between 0 and 1. Raises ValueError for the explicit validation failures.
+    The original query text is retained; later nodes add their own results.
+    """
     if not isinstance(query, str) or not query.strip():
         raise ValueError("The inquiry must be a nonempty string.")
 

@@ -1,3 +1,5 @@
+"""Classify inquiries with the supplied taxonomy and structured local Qwen output."""
+
 import json
 from pathlib import Path
 from typing import Literal
@@ -27,6 +29,14 @@ class Classification(BaseModel):
 
 
 def classify_inquiry(query: str) -> Classification:
+    """Return a validated category and reason for a nonblank inquiry.
+
+    Sends the full taxonomy descriptions and inquiry to Qwen without
+    retrieved examples. Raises ValueError for blank input, truncated output,
+    or an absent or invalid parsed response. Model and file errors propagate.
+    Schema validation does not prove the category is correct or enforce
+    the prompt's requested explanation length.
+    """
     if not query.strip():
         raise ValueError("The inquiry must not be empty.")
 
@@ -88,6 +98,7 @@ def classify_inquiry(query: str) -> Classification:
 
 
 def main():
+    """Read one inquiry and print the validated classification as JSON."""
     query = input("Customer inquiry: ").strip()
     print("Waiting for the local model...", flush=True)
 

@@ -1,3 +1,5 @@
+"""Expose the Streamlit backend and a CLI that displays LangGraph node updates."""
+
 import argparse
 import json
 
@@ -5,6 +7,7 @@ from src.workflow import make_initial_state, triage_graph
 
 
 def main():
+    """Read one inquiry from the terminal and print node progress and final state."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--threshold", type=float, default=0.5)
@@ -43,6 +46,21 @@ def triage_inquiry(
     top_k: int = 3,
     confidence_threshold: float = 0.5,
 ) -> dict:
+    """Run one independent inquiry through the complete triage workflow.
+
+    Args:
+        query: Nonblank customer inquiry; successful results preserve this text.
+        top_k: Number of historical cases to retrieve, from 1 to 10.
+        confidence_threshold: Review cutoff between 0 and 1.
+
+    Returns:
+        A dictionary containing the inquiry, category, priority, queue,
+        confidence, suggested notes, retrieved cases, and decision diagnostics.
+        The graph's nested decision fields are flattened for the interface.
+
+    Input validation and backend failures propagate to the caller; this
+    function does not retain conversation history or contact a reviewer.
+    """
     initial_state = make_initial_state(
         query=query,
         top_k=top_k,

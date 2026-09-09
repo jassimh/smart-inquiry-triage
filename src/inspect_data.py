@@ -1,3 +1,5 @@
+"""Audit historical case structure, allowed labels, and category-to-queue consistency."""
+
 import json
 from pathlib import Path
 
@@ -10,6 +12,12 @@ DATA_DIR = PROJECT_ROOT / "data"
 
 
 def main():
+    """Validate the CSV against the taxonomy and print distribution summaries.
+
+    Checks required columns, nonblank fields, unique case IDs, allowed
+    categories and priorities, and one queue per category. Raises ValueError
+    when a check fails.
+    """
     # Load the historical cases and category definitions.
     cases = pd.read_csv(DATA_DIR / "past_cases.csv")
 

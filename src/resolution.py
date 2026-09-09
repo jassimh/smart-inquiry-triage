@@ -1,3 +1,5 @@
+"""Draft suggested support actions with Qwen; historical cases contain no proven fixes."""
+
 import json
 
 from langchain_ollama import ChatOllama
@@ -22,6 +24,16 @@ def draft_resolution(
     routed_queue: str,
     retrieved_cases: list[dict],
 ) -> str:
+    """Return one or two suggested notes.
+
+    Uses the original inquiry, category, decision, queue, and matching-category
+    historical cases as context for a second chat call. The output schema
+    limits the number of notes; the prompt's word limit and factual quality
+    are not enforced. This function does not alter the supplied decisions.
+
+    Raises ValueError for truncated, invalid, missing, or blank generated
+    notes. Model failures propagate. Suggested actions are not executed.
+    """
     # These examples are context, not records of successful resolutions.
     relevant_cases = [
         {

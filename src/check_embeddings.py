@@ -1,10 +1,16 @@
+"""Demonstrate semantic ranking over three fictional texts without using the CSV index."""
+
 from math import sqrt
 
 from langchain_ollama import OllamaEmbeddings
 
 
 def cosine_similarity(vector_a, vector_b):
-    """Compare vector directions; larger values mean greater similarity."""
+    """Return the cosine similarity of two equal-dimensional nonzero vectors.
+
+    Raises ValueError for mismatched dimensions or zero vector magnitude.
+    The score compares vector directions; it is not a correctness probability.
+    """
     if len(vector_a) != len(vector_b):
         raise ValueError("Embedding dimensions do not match.")
 
@@ -19,6 +25,7 @@ def cosine_similarity(vector_a, vector_b):
 
 
 def main():
+    """Embed three fictional examples and a query, then print their similarity ranking."""
     embeddings = OllamaEmbeddings(
         model="nomic-embed-text:latest",
         base_url="http://127.0.0.1:11434",

@@ -1,3 +1,5 @@
+"""Build and query the persistent historical-case index using Nomic and Chroma."""
+
 import argparse
 import csv
 from hashlib import sha256
@@ -21,6 +23,7 @@ class NomicEmbeddings(Embeddings):
     """Apply the appropriate Nomic prefix automatically."""
 
     def __init__(self):
+        """Configure the local embedding client without generating vectors."""
         self.client = OllamaEmbeddings(
             model=EMBEDDING_MODEL,
             base_url="http://127.0.0.1:11434",
@@ -28,20 +31,28 @@ class NomicEmbeddings(Embeddings):
         )
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        """Return one embedding per text using Nomic's search_document prefix."""
         return self.client.embed_documents([
             f"search_document: {text}" for text in texts
         ])
 
     def embed_query(self, text: str) -> list[float]:
+        """Return a query embedding using Nomic's search_query prefix."""
         return self.client.embed_query(f"search_query: {text}")
 
 
 def load_cases():
+    """Read the supplied CSV as dictionaries; this helper does not validate labels."""
     with CSV_PATH.open(encoding="utf-8-sig", newline="") as file:
         return list(csv.DictReader(file))
 
 
 def get_store():
+    """Open or create the local cosine-distance collection for the current CSV.
+
+    The collection name includes a CSV hash and a manual embedding version.
+    This function does not ingest cases or verify index completeness.
+    """
     # A changed CSV gets a separate collection.
     data_version = sha256(CSV_PATH.read_bytes()).hexdigest()[:12]
 
@@ -54,6 +65,12 @@ def get_store():
 
 
 def build_index():
+    """Validate the CSV, embed inquiries, and persist cases under stable IDs.
+
+    Stores labels and queues as metadata, processes batches of 32, and prints
+    progress. Raises RuntimeError if the final stored IDs differ from the CSV.
+    Reruns recompute embeddings and update records with the same IDs.
+    """
     # Reuse the audit you already implemented.
     validate_data()
 
@@ -99,6 +116,13 @@ def build_index():
 
 
 def retrieve_cases(query: str, top_k: int = 3) -> list[dict]:
+    """Return Top-K historical matches with text, metadata, and cosine scores.
+
+    Requires nonblank query text and Top-K from 1 to 10. Searches across all
+    categories and converts cosine distance to similarity with 1 - distance.
+    Raises RuntimeError for a missing or incomplete case index; model and
+    store failures propagate. Similarity ranks neighbours, not their urgency.
+    """
     if not query.strip():
         raise ValueError("The inquiry must not be empty.")
 
@@ -132,6 +156,7 @@ def retrieve_cases(query: str, top_k: int = 3) -> list[dict]:
 
 
 def main():
+    """Build the index with --ingest, or read an inquiry and print ranked matches."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--ingest", action="store_true")
     parser.add_argument("--top-k", type=int, default=3)

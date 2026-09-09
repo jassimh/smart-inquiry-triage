@@ -1,3 +1,5 @@
+"""Derive priority, queue, and an uncalibrated review score from historical evidence."""
+
 import argparse
 import json
 from math import isfinite
@@ -10,7 +12,11 @@ PRIORITY_ORDER = {"low": 0, "medium": 1, "high": 2}
 
 
 def route_category(category: str) -> str:
-    """Look up the destination without asking an LLM."""
+    """Return the CSV queue mapped to a category without calling a model.
+
+    Raises ValueError if the category is unmapped or a category has conflicting
+    queues. Selecting a queue does not send a ticket to an external system.
+    """
     queue_map = {}
 
     for case in load_cases():
@@ -33,7 +39,20 @@ def assess_evidence(
     retrieved_cases: list[dict],
     confidence_threshold: float = 0.5,
 ) -> dict:
-    """Derive provisional priority and an uncalibrated confidence signal."""
+    """Return priority, voting diagnostics, confidence, and review reasons.
+
+    Positive similarities clipped to [0, 1] vote within the predicted
+    category; exact vote ties favor higher priority. Confidence multiplies
+    mean similarity, category agreement, and winning-priority weight share.
+    Review is required below the threshold, or whenever supporting evidence
+    is absent; absent evidence also yields a medium priority placeholder.
+
+    The provisional flag identifies that fallback, not every uncertain case.
+    This function reads no original inquiry text and cannot independently
+    interpret urgency or negation. Confidence is not a calibrated probability.
+    Invalid thresholds, non-finite scores, and invalid voting priorities
+    raise ValueError.
+    """
     if not 0 <= confidence_threshold <= 1:
         raise ValueError("Confidence threshold must be between 0 and 1.")
 
@@ -120,6 +139,7 @@ def assess_evidence(
 
 
 def main():
+    """Run classification, retrieval, and decisions as a standalone CLI."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--threshold", type=float, default=0.5)
