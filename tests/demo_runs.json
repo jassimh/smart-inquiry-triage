@@ -1,0 +1,114 @@
+{
+  "captured_at": "2026-09-09T17:30:10.101Z",
+  "commit": "4b623209fc2333a98d1ec0bf2f3f2c8b179b1426",
+  "source": "Live Streamlit browser submissions using local Ollama and Chroma",
+  "runs": [
+    {
+      "id": "DEMO-01",
+      "query": "I was charged two times for the same monthly payment.",
+      "top_k": 5,
+      "confidence_threshold": 0.5,
+      "elapsed_seconds": 9.07,
+      "displayed_result": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+      "screenshots": [
+        "docs/screenshots/01-billing-result.png",
+        "docs/screenshots/02-billing-evidence.png"
+      ],
+      "evidence_text": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_down\n\nRetrieved historical cases\n\nCASE-0227 | billing | high | similarity 0.755\n\nThere are two identical charges on the same date on my account.\n\nCASE-0115 | billing | high | similarity 0.728\n\nI was charged a late fee even though I paid on time.\n\nCASE-0056 | billing | high | similarity 0.715\n\nI was double-charged for my extended warranty payment.\n\nCASE-0078 | ordering | high | similarity 0.705\n\nMy deposit was taken twice for the same order.\n\nCASE-0199 | billing | high | similarity 0.676\n\nMy lease payment was withdrawn twice this month.\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The inquiry is about duplicate charges for a monthly payment, which falls under billing inquiries related to payment disputes and incorrect charges.\"\n\"priority_votes\":{\n\"low\":0\n\"medium\":0\n\"high\":2.874677062034607\n}\n\"confidence_components\":{\n\"similarity_strength\":0.7158546209335327\n\"category_agreement\":0.8\n\"priority_agreement\":1\n}\n\"review_status\":\"not_flagged\"\n}"
+    },
+    {
+      "id": "DEMO-02",
+      "query": "I was charged two times for the same monthly payment.",
+      "top_k": 5,
+      "confidence_threshold": 0.8,
+      "elapsed_seconds": 7.81,
+      "displayed_result": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts for both charges to confirm duplication.\nIf duplicate charges exist, initiate a refund for the second charge and contact the billing team for resolution.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+      "screenshots": [
+        "docs/screenshots/03-threshold-review.png"
+      ],
+      "evidence_text": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts for both charges to confirm duplication.\nIf duplicate charges exist, initiate a refund for the second charge and contact the billing team for resolution.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The inquiry is about duplicate charges for a monthly payment, which falls under billing inquiries related to payment disputes and incorrect charges.\"\n\"priority_votes\":{\n\"low\":0\n\"medium\":0\n\"high\":2.874677062034607\n}\n\"confidence_components\":{\n\"similarity_strength\":0.7158546209335327\n\"category_agreement\":0.8\n\"priority_agreement\":1\n}\n\"review_status\":\"human_review_required\"\n}"
+    },
+    {
+      "id": "DEMO-03",
+      "query": "There is no overheating problem; I only need to change my service appointment.",
+      "top_k": 5,
+      "confidence_threshold": 0.5,
+      "elapsed_seconds": 8.98,
+      "displayed_result": "smart_toy\n\nQuery: There is no overheating problem; I only need to change my service appointment.\n\nCategory: service\n\nPriority: high\n\nRouted queue: Service Scheduling Team\n\nConfidence score: 0.387\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nConfirm the current service appointment date and time to ensure it aligns with the customer's schedule.\nIf the appointment is scheduled but the customer needs to reschedule, request their preferred new date and time.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+      "screenshots": [
+        "docs/screenshots/04-negation-limitation.png"
+      ],
+      "evidence_text": "smart_toy\n\nQuery: There is no overheating problem; I only need to change my service appointment.\n\nCategory: service\n\nPriority: high\n\nRouted queue: Service Scheduling Team\n\nConfidence score: 0.387\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nConfirm the current service appointment date and time to ensure it aligns with the customer's schedule.\nIf the appointment is scheduled but the customer needs to reschedule, request their preferred new date and time.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_down\n\nRetrieved historical cases\n\nCASE-0176 | billing | high | similarity 0.658\n\nI was overcharged on my last invoice and need a correction.\n\nCASE-0251 | service | high | similarity 0.649\n\nMy coolant is leaking onto the driveway and the engine is overheating.\n\nCASE-0148 | service | high | similarity 0.647\n\nMy brakes are grinding loudly and I need the earliest possible service appointment.\n\nCASE-0289 | service | low | similarity 0.642\n\nThe technician forgot to reset my service reminder after the last visit.\n\nCASE-0226 | service | high | similarity 0.628\n\nThere's a strange burning smell after my recent service visit.\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The customer is requesting to change their service appointment, which falls under scheduling and rescheduling appointments within vehicle maintenance. This is a direct service-related inquiry without any technical or billing issues.\"\n\"priority_votes\":{\n\"low\":0.6420853137969971\n\"medium\":0\n\"high\":1.9240300059318542\n}\n\"confidence_components\":{\n\"similarity_strength\":0.6449174046516418\n\"category_agreement\":0.8\n\"priority_agreement\":0.7497831415211523\n}\n\"review_status\":\"human_review_required\"\n}"
+    }
+  ],
+  "interaction_checks": {
+    "previous_result_preserved_after_slider_change": true,
+    "two_inquiries_in_session": true,
+    "completed": true
+  },
+  "previous_capture": {
+    "captured_at": "2026-09-09T17:26:07.519Z",
+    "commit": "4b623209fc2333a98d1ec0bf2f3f2c8b179b1426",
+    "source": "Live Streamlit browser submissions using local Ollama and Chroma",
+    "runs": [
+      {
+        "id": "DEMO-01",
+        "query": "I was charged two times for the same monthly payment.",
+        "top_k": 5,
+        "confidence_threshold": 0.5,
+        "elapsed_seconds": 13.02,
+        "displayed_result": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+        "screenshots": [
+          "docs/screenshots/01-billing-result.png",
+          "docs/screenshots/02-billing-evidence.png"
+        ],
+        "evidence_text": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_down\n\nRetrieved historical cases\n\nCASE-0227 | billing | high | similarity 0.755\n\nThere are two identical charges on the same date on my account.\n\nCASE-0115 | billing | high | similarity 0.728\n\nI was charged a late fee even though I paid on time.\n\nCASE-0056 | billing | high | similarity 0.715\n\nI was double-charged for my extended warranty payment.\n\nCASE-0078 | ordering | high | similarity 0.705\n\nMy deposit was taken twice for the same order.\n\nCASE-0199 | billing | high | similarity 0.676\n\nMy lease payment was withdrawn twice this month.\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The inquiry is about duplicate charges for a monthly payment, which falls under billing inquiries related to payment disputes and incorrect charges.\"\n\"priority_votes\":{\n\"low\":0\n\"medium\":0\n\"high\":2.874677062034607\n}\n\"confidence_components\":{\n\"similarity_strength\":0.7158546209335327\n\"category_agreement\":0.8\n\"priority_agreement\":1\n}\n\"review_status\":\"not_flagged\"\n}"
+      },
+      {
+        "id": "DEMO-02",
+        "query": "I was charged two times for the same monthly payment.",
+        "top_k": 5,
+        "confidence_threshold": 0.8,
+        "elapsed_seconds": 7.52,
+        "displayed_result": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts for both charges to confirm duplication.\nIf duplicate charges exist, initiate a refund for the second charge and contact the billing team for resolution.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+        "screenshots": [
+          "docs/screenshots/03-threshold-review.png"
+        ],
+        "evidence_text": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts for both charges to confirm duplication.\nIf duplicate charges exist, initiate a refund for the second charge and contact the billing team for resolution.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The inquiry is about duplicate charges for a monthly payment, which falls under billing inquiries related to payment disputes and incorrect charges.\"\n\"priority_votes\":{\n\"low\":0\n\"medium\":0\n\"high\":2.874677062034607\n}\n\"confidence_components\":{\n\"similarity_strength\":0.7158546209335327\n\"category_agreement\":0.8\n\"priority_agreement\":1\n}\n\"review_status\":\"human_review_required\"\n}"
+      },
+      {
+        "id": "DEMO-03",
+        "query": "There is no overheating problem; I only need to change my service appointment.",
+        "top_k": 5,
+        "confidence_threshold": 0.5,
+        "elapsed_seconds": 9.09,
+        "displayed_result": "smart_toy\n\nQuery: There is no overheating problem; I only need to change my service appointment.\n\nCategory: service\n\nPriority: high\n\nRouted queue: Service Scheduling Team\n\nConfidence score: 0.387\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nConfirm the current service appointment date and time to ensure it aligns with the customer's schedule.\nIf the appointment is scheduled but the customer needs to reschedule, request their preferred new date and time.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+        "screenshots": [
+          "docs/screenshots/04-negation-limitation.png"
+        ],
+        "evidence_text": "smart_toy\n\nQuery: There is no overheating problem; I only need to change my service appointment.\n\nCategory: service\n\nPriority: high\n\nRouted queue: Service Scheduling Team\n\nConfidence score: 0.387\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nConfirm the current service appointment date and time to ensure it aligns with the customer's schedule.\nIf the appointment is scheduled but the customer needs to reschedule, request their preferred new date and time.\n\nHuman review required. Suggested actions need verification.\n\nConfidence is below the selected threshold.\n\nkeyboard_arrow_down\n\nRetrieved historical cases\n\nCASE-0176 | billing | high | similarity 0.658\n\nI was overcharged on my last invoice and need a correction.\n\nCASE-0251 | service | high | similarity 0.649\n\nMy coolant is leaking onto the driveway and the engine is overheating.\n\nCASE-0148 | service | high | similarity 0.647\n\nMy brakes are grinding loudly and I need the earliest possible service appointment.\n\nCASE-0289 | service | low | similarity 0.642\n\nThe technician forgot to reset my service reminder after the last visit.\n\nCASE-0226 | service | high | similarity 0.628\n\nThere's a strange burning smell after my recent service visit.\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The customer is requesting to change their service appointment, which falls under scheduling and rescheduling appointments within vehicle maintenance. This is a direct service-related inquiry without any technical or billing issues.\"\n\"priority_votes\":{\n\"low\":0.6420853137969971\n\"medium\":0\n\"high\":1.9240300059318542\n}\n\"confidence_components\":{\n\"similarity_strength\":0.6449174046516418\n\"category_agreement\":0.8\n\"priority_agreement\":0.7497831415211523\n}\n\"review_status\":\"human_review_required\"\n}"
+      }
+    ],
+    "interaction_checks": {
+      "previous_result_preserved_after_slider_change": true,
+      "two_inquiries_in_session": true,
+      "completed": true
+    }
+  },
+  "capture_note": "Recaptured at taller browser viewports to avoid clipped evidence; original run retained below.",
+  "screenshot_recaptures": [
+    {
+      "id": "DEMO-01-EVIDENCE-RECAPTURE",
+      "query": "I was charged two times for the same monthly payment.",
+      "top_k": 5,
+      "confidence_threshold": 0.5,
+      "elapsed_seconds": 8.24,
+      "displayed_result": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_right\n\nRetrieved historical cases\n\nkeyboard_arrow_right\n\nDecision details",
+      "screenshots": [
+        "docs/screenshots/02-billing-evidence.png"
+      ],
+      "evidence_text": "smart_toy\n\nQuery: I was charged two times for the same monthly payment.\n\nCategory: billing\n\nPriority: high\n\nRouted queue: Billing & Payments Team\n\nConfidence score: 0.573\n\nExperimental evidence score; not a probability of correctness.\n\nSuggested resolution notes:\n\nVerify the exact payment dates and amounts of the duplicate charges to confirm they are for the same service period.\nIf the duplicate charges persist after checking, escalate to Billing & Payments for resolution.\nkeyboard_arrow_down\n\nRetrieved historical cases\n\nCASE-0227 | billing | high | similarity 0.755\n\nThere are two identical charges on the same date on my account.\n\nCASE-0115 | billing | high | similarity 0.728\n\nI was charged a late fee even though I paid on time.\n\nCASE-0056 | billing | high | similarity 0.715\n\nI was double-charged for my extended warranty payment.\n\nCASE-0078 | ordering | high | similarity 0.705\n\nMy deposit was taken twice for the same order.\n\nCASE-0199 | billing | high | similarity 0.676\n\nMy lease payment was withdrawn twice this month.\nkeyboard_arrow_down\n\nDecision details\n\n{\n\"classification_reason\":\"The inquiry is about duplicate charges for a monthly payment, which falls under billing inquiries related to payment disputes and incorrect charges.\"\n\"priority_votes\":{\n\"low\":0\n\"medium\":0\n\"high\":2.874677062034607\n}\n\"confidence_components\":{\n\"similarity_strength\":0.7158546209335327\n\"category_agreement\":0.8\n\"priority_agreement\":1\n}\n\"review_status\":\"not_flagged\"\n}",
+      "captured_at": "2026-09-09T17:32:28.029Z"
+    }
+  ]
+}
