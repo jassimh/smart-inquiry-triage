@@ -100,3 +100,5 @@ Review is flagged when confidence is below the selected threshold. Missing posit
 - Notes may assume missing facts, give unsuitable advice, or fulfill unrelated requests. Schema validation checks structure, not correctness.
 - Conservative confidence can flag most inquiries; reducing the threshold does not correct the underlying decisions.
 - No production accuracy or time-saving claim is made. Urgency handling, improved resolution context, and calibrated confidence remain future work.
+
+For module responsibilities, the backend contract, and a worked confidence example, see the [architecture and code guide](docs/README.md).
