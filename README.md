@@ -102,3 +102,5 @@ Review is flagged when confidence is below the selected threshold. Missing posit
 - No production accuracy or time-saving claim is made. Urgency handling, improved resolution context, and calibrated confidence remain future work.
 
 For module responsibilities, the backend contract, and a worked confidence example, see the [architecture and code guide](docs/README.md).
+
+See the [case study presentation](presentation/smart_inquiry_triage_presentation.pdf) for the business context, architecture, demo results, and roadmap.
